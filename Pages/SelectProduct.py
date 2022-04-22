@@ -1,18 +1,21 @@
-from Locators.Locators import LocatorsClass
-from Common.CustomFind.FindElement import CustomFindElement
+from Pages.Common.BaseClass import BaseClass
 
-class SelectProductClass():
+
+class SelectProductClass(BaseClass):
     def __init__(self, driver):
-        self.locators = LocatorsClass()
-        self.driver = driver
-        self.customFind = CustomFindElement(self.driver)
-
+        super().__init__(driver)
+        self.getItemAttribute = "itemAttribute"
 
     def select_the_product(self):
         selectProduct = self.customFind.find_element(self.locators.selectProductClick)
-        #selectProduct = self.driver.find_element(self.locators.selectProductClick[0], self.locators.selectProductClick[1])
         selectProduct.click()
 
+    def get_item_attribute(self):
+        self.getItemAttribute = \
+            self.customFind.find_element(self.locators.selectProductClick).find_elements_by_tag_name("span")[
+                0].get_attribute('innerHTML')
+        print(str(self.getItemAttribute))
+        return self.getItemAttribute
 
     def press_add_to_cart_button(self):
         try:

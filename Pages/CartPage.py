@@ -1,26 +1,31 @@
-from Locators.Locators import LocatorsClass
-from Common.CustomFind.FindElement import CustomFindElement
+from Pages.Common.BaseClass import BaseClass
+from Pages.SelectProduct import SelectProductClass
 
 
-class CartClass():
+class CartClass(BaseClass):
     def __init__(self, driver):
-        self.locators = LocatorsClass()
-        self.driver = driver
-        self.customFind = CustomFindElement(self.driver)
+        super().__init__(driver)
+        self.attribute = None
+        self.selectProduct = SelectProductClass
 
+    def check_item_in_cart(self, attribute):
+        self.attribute = attribute
+        if self.driver.page_source.find(self.attribute) != -1:
+            print("Element in cart")
+        else:
+            print("No such element in cart")
 
-    def my_product_displayed(self):
-        myProduct = self.customFind.find_element(self.locators.myProduct)
-        try:
-        #myProduct = self.driver.find_element(self.locators.myProduct[0], self.locators.myProduct[1])
-            print (myProduct.is_displayed())
-        except:
-            print("The product has not been added to the card")
+    def delete_cart_first_item(self):
+        pressDeleteButton = self.customFind.find_element(self.locators.deleteButton)
+        if pressDeleteButton is not None:
+            pressDeleteButton.click()
 
-    def press_my_product_delete_button(self):
-        try:
-            for delete in self.driver.page_source:
-                pressDeleteButton = self.customFind.find_element(self.locators.DeleteButton)
-                pressDeleteButton.click()
-        except:
-            print("cart is empty")
+    def delete_all_products_from_cart(self):
+        cartElementCount = self.customFind.find_element(self.locators.cartItemsCountNumber).text
+        cartElementCount = int(cartElementCount)
+
+        while cartElementCount > 0:
+            self.delete_cart_first_item()
+            cartElementCount -= 1
+        if cartElementCount == 0:
+            print("Cart is empty")

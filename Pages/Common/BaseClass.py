@@ -1,6 +1,6 @@
+from Common.CustomFind.FindElement import CustomFindElement
 from Common.Variables.Variables import VariablesClass
 from Locators.Locators import LocatorsClass
-from Common.CustomFind.FindElement import CustomFindElement
 
 
 class BaseClass():
